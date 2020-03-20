@@ -4,7 +4,7 @@
     "preset": "@shelf/jest-mongodb"
   },
   "version": "1.0.0",
-  "description": "",
+  "description": "backend-template",
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
