@@ -1,9 +1,7 @@
 const express = require("express");
 const usersRouter = express.Router();
-const { users } = require("../../data/mockUsers");
+const { findAll } = require("../controllers/users.controller");
 
-usersRouter.get("/", (req, res, next) => {
-  res.status(200).json(users);
-});
+usersRouter.get("/", findAll);
 
 module.exports = usersRouter;

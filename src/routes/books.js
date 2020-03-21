@@ -1,9 +1,7 @@
 const express = require("express");
 const booksRouter = express.Router();
-const { books } = require("../../data/mockBooks.json");
+const Ctrl = require("../controllers/books.controller");
 
-booksRouter.get("/", (req, res, next) => {
-  res.status(200).json(books);
-});
+booksRouter.get("/", Ctrl.findAll);
 
 module.exports = booksRouter;
