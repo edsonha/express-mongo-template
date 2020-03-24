@@ -136,4 +136,43 @@ describe("Book", () => {
       expect(getResponse.body).toHaveLength(3);
     });
   });
+
+  describe("PUT", () => {
+    it("/books/:id should update one book with new credential based on id given ", async () => {
+      const validId = "7d2e85951b62fc093cc3319b";
+      const updatedField = { title: "updated title", author: "updated author" };
+      const putResponse = await request(app)
+        .put(route(validId))
+        .send(updatedField)
+        .set("Content-Type", "application/json");
+      expect(putResponse.status).toBe(200);
+      expect(putResponse.body).toEqual({
+        _id: "7d2e85951b62fc093cc3319b",
+        title: "updated title",
+        author: "updated author"
+      });
+
+      const getResponse = await request(app).get(
+        route("7d2e85951b62fc093cc3319b")
+      );
+      expect(getResponse.body.title).toBe("updated title");
+      expect(getResponse.body.author).toBe("updated author");
+    });
+
+    it("/books/:id should return 404 error if invalid id is given ", async () => {
+      const invalidId = "5d2e7e1aec0f970d68a71465";
+      const updatedField = {
+        title: "updated title",
+        author: "updated author"
+      };
+      const putResponse = await request(app)
+        .put(route(invalidId))
+        .send(updatedField)
+        .set("Content-Type", "application/json");
+      expect(putResponse.status).toBe(404);
+      expect(putResponse.body).toEqual({
+        message: `Unable to update. Invalid id: ${invalidId}`
+      });
+    });
+  });
 });

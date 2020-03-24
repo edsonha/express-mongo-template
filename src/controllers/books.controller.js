@@ -57,4 +57,24 @@ const createOne = async (req, res, next) => {
   }
 };
 
-module.exports = { findAll, searchOne, deleteOne, createOne };
+const updateOne = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const foundBook = await Book.findById(id);
+    if (!foundBook) {
+      res.status(404).json({ message: `Unable to update. Invalid id: ${id}` });
+    } else {
+      const updateOption = { new: true };
+      await Book.findByIdAndUpdate(id, req.body, updateOption, function(
+        err,
+        result
+      ) {
+        res.status(200).json(result);
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { findAll, searchOne, deleteOne, createOne, updateOne };
