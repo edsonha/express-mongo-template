@@ -3,7 +3,6 @@ const dbURI = global.__MONGO_URI__ || "mongodb://localhost:27017/template";
 
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
-  useCreateIndex: true,
   useUnifiedTopology: true,
   useFindAndModify: false
 });
