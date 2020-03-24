@@ -5,5 +5,6 @@ const Ctrl = require("../controllers/books.controller");
 booksRouter.get("/", Ctrl.findAll);
 booksRouter.get("/:id", Ctrl.searchOne);
 booksRouter.delete("/:id", Ctrl.deleteOne);
+booksRouter.post("/", Ctrl.createOne);
 
 module.exports = booksRouter;

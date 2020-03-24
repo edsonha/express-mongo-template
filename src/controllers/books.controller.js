@@ -39,4 +39,22 @@ const deleteOne = async (req, res, next) => {
   }
 };
 
-module.exports = { findAll, searchOne, deleteOne };
+const createOne = async (req, res, next) => {
+  try {
+    const newBook = req.body;
+    const { title, author } = newBook;
+    const foundDuplicateBook = await Book.findOne({ title: title });
+    if (foundDuplicateBook && foundDuplicateBook.author === author) {
+      res.status(422).json({
+        message: "Unable to create. Matching title and author detected"
+      });
+    } else {
+      await Book.create(newBook);
+      res.status(201).json(newBook);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { findAll, searchOne, deleteOne, createOne };
