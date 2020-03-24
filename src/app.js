@@ -1,3 +1,4 @@
+require("./utils/db");
 const express = require("express");
 const app = express();
 const booksRouter = require("./routes/books");

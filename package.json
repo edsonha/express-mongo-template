@@ -1,8 +1,5 @@
 {
   "name": "express-mongoose-template",
-  "jest": {
-    "preset": "@shelf/jest-mongodb"
-  },
   "version": "1.0.0",
   "description": "backend-template",
   "main": "index.js",

@@ -1,17 +1,20 @@
-const { books } = require("../../data/mockBooks.json");
+require("../models/books.model");
+const mongoose = require("mongoose");
+const Book = mongoose.model("book");
 
-const findAll = (req, res, next) => {
+const findAll = async (req, res, next) => {
   try {
-    res.status(200).json(books);
+    const bookList = await Book.find();
+    res.status(200).json(bookList);
   } catch (err) {
     next(err);
   }
 };
 
-const searchOne = (req, res, next) => {
+const searchOne = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const foundBook = books.find(book => book.id === id);
+    const foundBook = await Book.findById(id);
     if (foundBook) {
       res.status(200).json(foundBook);
     } else {
@@ -22,13 +25,11 @@ const searchOne = (req, res, next) => {
   }
 };
 
-const deleteOne = (req, res, next) => {
+const deleteOne = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deletedBook = books.find(book => book.id === id);
+    const deletedBook = await Book.findByIdAndDelete(id);
     if (deletedBook) {
-      const deletedIndex = books.indexOf(deletedBook);
-      books.splice(deletedIndex, 1);
       res.status(200).json(deletedBook);
     } else {
       res.status(404).json({ message: `Unable to delete book with id: ${id}` });
