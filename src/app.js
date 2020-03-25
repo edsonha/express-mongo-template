@@ -3,8 +3,10 @@ const express = require("express");
 const app = express();
 const booksRouter = require("./routes/books");
 const usersRouter = require("./routes/users");
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.status(200).json("Welcome to Express Mongoose Backend template");
