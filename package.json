@@ -2,7 +2,7 @@
   "name": "express-mongoose-template",
   "version": "1.0.0",
   "description": "backend-template",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --runInBand --watchAll",
