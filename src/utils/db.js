@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const dbURI = global.__MONGO_URI__ || "mongodb://localhost:27017/template";
+const dbURI = process.env.MONGODB_URI;
 
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
