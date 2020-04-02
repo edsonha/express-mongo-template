@@ -8,9 +8,9 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-// app.get("/", (req, res) => {
-//   res.status(200).json("Welcome to Express Mongoose Backend template");
-// });
+app.get("/", (req, res) => {
+  res.status(200).json("Welcome to Express Mongoose Backend template");
+});
 
 app.use("/books", booksRouter);
 app.use("/users", usersRouter);
