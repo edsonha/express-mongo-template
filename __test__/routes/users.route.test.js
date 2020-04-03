@@ -66,4 +66,24 @@ describe("User", () => {
       expect(response.body.message).toBe("Wrong password");
     });
   });
+
+  describe("register route", () => {
+    it("POST should be able to register a new user", async () => {
+      const newUser = {
+        name: "Tom",
+        email: "tom@gmail.com",
+        password: "qwe",
+        passwordConfirmation: "qwe"
+      };
+
+      const response = await request(app)
+        .post(route("register"))
+        .set("Content-Type", "application/json")
+        .send(newUser);
+      expect(response.status).toBe(201);
+      expect(response.body.message).toBe("Account created");
+      expect(response.body.name).toBe("Tom");
+      expect(response.body.books).toEqual([]);
+    });
+  });
 });

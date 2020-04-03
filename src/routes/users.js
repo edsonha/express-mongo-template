@@ -26,4 +26,21 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
+usersRouter.post("/register", async (req, res, next) => {
+  try {
+    const { name, email, password, passwordConfirmation } = req.body;
+    await User.create({ name, email, password });
+    const newUser = await User.findOne({ email });
+    res
+      .status(201)
+      .json({
+        message: "Account created",
+        name: newUser.name,
+        books: newUser.books
+      });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = usersRouter;
