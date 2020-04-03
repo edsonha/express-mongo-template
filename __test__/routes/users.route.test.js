@@ -68,7 +68,7 @@ describe("User", () => {
   });
 
   describe("register route", () => {
-    it("POST should be able to register a new user", async () => {
+    it("POST should be able to register a new user and store new user profile in database", async () => {
       const newUser = {
         name: "Tom",
         email: "tom@gmail.com",
@@ -82,8 +82,13 @@ describe("User", () => {
         .send(newUser);
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("Account created");
-      expect(response.body.name).toBe("Tom");
-      expect(response.body.books).toEqual([]);
+
+      const usersCollection = await db.collection("users");
+      const insertedNewUser = await usersCollection.findOne({
+        email: newUser.email
+      });
+      expect(insertedNewUser.name).toBe("Tom");
+      expect(insertedNewUser.books).toEqual([]);
     });
 
     it("POST should deny registration if the same email is already registered", async () => {
