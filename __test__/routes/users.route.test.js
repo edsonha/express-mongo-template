@@ -47,5 +47,23 @@ describe("User", () => {
       expect(response.body.books[0].title).toBe("Brave New World");
       expect(response.body.books[1].title).toBe("Fahrenheit 451");
     });
+
+    it("POST should not be able to login if wrong email is given", async () => {
+      const response = await request(app)
+        .post(route("login"))
+        .set("Content-Type", "application/json")
+        .send({ email: "random@gmail.com", password: "123" });
+      expect(response.status).toBe(401);
+      expect(response.body.message).toBe("Wrong credentials");
+    });
+
+    it("POST should not be able to login if wrong password is given", async () => {
+      const response = await request(app)
+        .post(route("login"))
+        .set("Content-Type", "application/json")
+        .send({ email: "bob@gmail.com", password: "random" });
+      expect(response.status).toBe(401);
+      expect(response.body.message).toBe("Wrong password");
+    });
   });
 });

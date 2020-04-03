@@ -9,11 +9,17 @@ usersRouter.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     const foundUser = await User.findOne({ email });
 
+    if (!foundUser) {
+      res.status(401).json({ message: "Wrong credentials" });
+    }
+
     if (foundUser.password === password) {
       res.status(200).json({
         name: foundUser.name,
         books: foundUser.books
       });
+    } else {
+      res.status(401).json({ message: "Wrong password" });
     }
   } catch (err) {
     next(err);
