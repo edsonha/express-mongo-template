@@ -1,12 +1,22 @@
+const mongoose = require("mongoose");
+const { books } = require("./mockBooks");
+const braveNewWorldBook = books[1];
+const fahrenheitBook = books[2];
+
 const users = [
-  { id: "1", name: "Alice", books: [{ id: "2", title: "Brave New World" }] },
   {
-    id: "2",
+    _id: mongoose.Types.ObjectId("5d2e85951b62fc093cc3318b"),
+    name: "John",
+    email: "john@gmail.com",
+    password: "abc",
+    books: [braveNewWorldBook]
+  },
+  {
+    _id: mongoose.Types.ObjectId("7d2e85951b62fc093cc3319b"),
     name: "Bob",
-    books: [
-      { id: "1", title: "1984" },
-      { id: "3", title: "Fahrenheit 451" }
-    ]
+    email: "bob@gmail.com",
+    password: "123",
+    books: [braveNewWorldBook, fahrenheitBook]
   }
 ];
 
