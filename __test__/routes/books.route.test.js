@@ -135,6 +135,14 @@ describe("Book", () => {
       const getResponse = await request(app).get(route());
       expect(getResponse.body).toHaveLength(3);
     });
+
+    it("/books should return internal server error when only book title is given because the author field is required", async () => {
+      const postResponse = await request(app)
+        .post(route())
+        .set("Content-Type", "application/json")
+        .send({ title: "dummy title" });
+      expect(postResponse.status).toBe(500);
+    });
   });
 
   describe("PUT", () => {
