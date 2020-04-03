@@ -85,5 +85,38 @@ describe("User", () => {
       expect(response.body.name).toBe("Tom");
       expect(response.body.books).toEqual([]);
     });
+
+    it("POST should deny registration if the same email is already registered", async () => {
+      const sameEmailUser = {
+        name: "Johny",
+        email: "john@gmail.com",
+        password: "123",
+        passwordConfirmation: "123"
+      };
+      const response = await request(app)
+        .post(route("register"))
+        .set("Content-Type", "application/json")
+        .send(sameEmailUser);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("User already exists");
+    });
+
+    it("POST should deny registration if password and confirm password don't match", async () => {
+      const newUser = {
+        name: "Tom",
+        email: "tom@gmail.com",
+        password: "abc",
+        passwordConfirmation: "123"
+      };
+
+      const response = await request(app)
+        .post(route("register"))
+        .set("Content-Type", "application/json")
+        .send(newUser);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Password does not match");
+    });
   });
 });
