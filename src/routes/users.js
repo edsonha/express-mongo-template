@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("user");
 const express = require("express");
 const usersRouter = express.Router();
+const bcrypt = require("bcryptjs");
 
 usersRouter.post("/login", async (req, res, next) => {
   try {
@@ -13,10 +14,12 @@ usersRouter.post("/login", async (req, res, next) => {
       res.status(401).json({ message: "Wrong credentials" });
     }
 
-    if (foundUser.password === password) {
+    const isUser = await bcrypt.compare(password, foundUser.password);
+
+    if (isUser) {
       res.status(200).json({
         name: foundUser.name,
-        books: foundUser.books
+        books: foundUser.books,
       });
     } else {
       res.status(401).json({ message: "Wrong password" });
@@ -38,7 +41,10 @@ usersRouter.post("/register", async (req, res, next) => {
     if (foundUser) {
       res.status(400).json({ message: "User already exists" });
     } else {
-      await User.create({ name, email, password });
+      const saltRound = 10;
+      const digest = await bcrypt.hash(password, saltRound);
+      const userWithDigest = { name, email, password: digest };
+      await User.create(userWithDigest);
       res.status(201).json({ message: "Account created" });
     }
   } catch (err) {
