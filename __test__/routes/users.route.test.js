@@ -38,7 +38,7 @@ describe("User", () => {
   };
 
   describe("get user route", () => {
-    it("GET/users/:id should return the person name and book collectio info based on id given", async () => {
+    it("GET/users/:id should return the person name and book collection info based on id given", async () => {
       const validId = "7d2e85951b62fc093cc3319b";
       const response = await request(app).get(route(validId));
       expect(response.status).toBe(200);
@@ -51,6 +51,15 @@ describe("User", () => {
       expect(response.body).toEqual({
         name: "Bob",
         books: mockBooksWithStringID,
+      });
+    });
+
+    it("GET/users/:id should return 404 error if invalid id is given", async () => {
+      const invalidId = "5d2e7e1aec0f970d68a71465";
+      const response = await request(app).get(route(invalidId));
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        message: `Unable to find user with id: ${invalidId}`,
       });
     });
   });

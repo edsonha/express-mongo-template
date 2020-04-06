@@ -56,8 +56,12 @@ usersRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const foundUser = await User.findById(id);
-    const { name, books } = foundUser;
-    res.status(200).json({ name, books });
+    if (foundUser) {
+      const { name, books } = foundUser;
+      res.status(200).json({ name, books });
+    } else {
+      res.status(404).json({ message: `Unable to find user with id: ${id}` });
+    }
   } catch (err) {
     next(err);
   }
