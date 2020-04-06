@@ -3,6 +3,7 @@ const request = require("supertest");
 const app = require("../../src/app");
 const mongoose = require("mongoose");
 const { users } = require("../../data/mockUsers");
+const { books } = require("../../data/mockBooks");
 
 describe("User", () => {
   let connection;
@@ -11,7 +12,7 @@ describe("User", () => {
   beforeAll(async () => {
     connection = await MongoClient.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
     db = await connection.db();
   });
@@ -36,6 +37,24 @@ describe("User", () => {
     return `/users/${params}`;
   };
 
+  describe("get user route", () => {
+    it("GET/users/:id should return the person name and book collectio info based on id given", async () => {
+      const validId = "7d2e85951b62fc093cc3319b";
+      const response = await request(app).get(route(validId));
+      expect(response.status).toBe(200);
+
+      const mockBooksWithStringID = [];
+      for (let book of books) {
+        mockBooksWithStringID.push(JSON.parse(JSON.stringify(book)));
+      }
+
+      expect(response.body).toEqual({
+        name: "Bob",
+        books: mockBooksWithStringID,
+      });
+    });
+  });
+
   describe("login route", () => {
     it("POST should be able to login a user if correct email and password is given", async () => {
       const response = await request(app)
@@ -44,8 +63,9 @@ describe("User", () => {
         .send({ email: "bob@gmail.com", password: "123" });
       expect(response.status).toBe(200);
       expect(response.body.name).toBe("Bob");
-      expect(response.body.books[0].title).toBe("Brave New World");
-      expect(response.body.books[1].title).toBe("Fahrenheit 451");
+      expect(response.body.books[0].title).toBe("1984");
+      expect(response.body.books[1].title).toBe("Brave New World");
+      expect(response.body.books[2].title).toBe("Fahrenheit 451");
     });
 
     it("POST should not be able to login if wrong email is given", async () => {
@@ -73,7 +93,7 @@ describe("User", () => {
         name: "Tom",
         email: "tom@gmail.com",
         password: "qwe",
-        passwordConfirmation: "qwe"
+        passwordConfirmation: "qwe",
       };
 
       const response = await request(app)
@@ -85,7 +105,7 @@ describe("User", () => {
 
       const usersCollection = await db.collection("users");
       const insertedNewUser = await usersCollection.findOne({
-        email: newUser.email
+        email: newUser.email,
       });
       expect(insertedNewUser.name).toBe("Tom");
       expect(insertedNewUser.books).toEqual([]);
@@ -96,7 +116,7 @@ describe("User", () => {
         name: "Johny",
         email: "john@gmail.com",
         password: "123",
-        passwordConfirmation: "123"
+        passwordConfirmation: "123",
       };
       const response = await request(app)
         .post(route("register"))
@@ -112,7 +132,7 @@ describe("User", () => {
         name: "Tom",
         email: "tom@gmail.com",
         password: "abc",
-        passwordConfirmation: "123"
+        passwordConfirmation: "123",
       };
 
       const response = await request(app)

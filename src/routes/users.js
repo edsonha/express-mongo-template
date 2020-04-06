@@ -52,4 +52,15 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
+usersRouter.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const foundUser = await User.findById(id);
+    const { name, books } = foundUser;
+    res.status(200).json({ name, books });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = usersRouter;

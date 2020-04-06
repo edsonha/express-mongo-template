@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { books } = require("./mockBooks");
 const braveNewWorldBook = books[1];
-const fahrenheitBook = books[2];
 
 const users = [
   {
@@ -16,7 +15,7 @@ const users = [
     name: "Bob",
     email: "bob@gmail.com",
     password: "$2a$10$7.1XC32mTNFYRDT7hngTlO5ED1AI1oaiQ7bgBY6XrgFvkEyJSXODa",
-    books: [braveNewWorldBook, fahrenheitBook],
+    books: books,
   },
 ];
 
